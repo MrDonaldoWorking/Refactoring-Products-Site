@@ -17,7 +17,12 @@ import java.util.Map;
 /**
  * @author akirakozov
  */
-public class QueryServlet extends HttpServlet {
+public class QueryServlet extends AbstractServlet {
+    public QueryServlet(final SqlRequestService sqlRequestService) {
+        super(sqlRequestService);
+    }
+
+/*
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String command = request.getParameter("command");
@@ -112,5 +117,43 @@ public class QueryServlet extends HttpServlet {
 
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
+    }
+*/
+
+    @Override
+    protected void doGetImpl(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        final String command = request.getParameter("command");
+        String sql;
+        String header;
+        boolean product;
+        if ("max".equals(command)) {
+            sql = "SELECT * FROM PRODUCT ORDER BY PRICE DESC LIMIT 1";
+            header = "Product with max price";
+            product = true;
+        } else if ("min".equals(command)) {
+            sql = "SELECT * FROM PRODUCT ORDER BY PRICE LIMIT 1";
+            header = "Product with min price";
+            product = true;
+        } else if ("sum".equals(command)) {
+            sql = "SELECT SUM(price) FROM PRODUCT";
+            header = "Summary price";
+            product = false;
+        } else if ("count".equals(command)) {
+            sql = "SELECT COUNT(*) FROM PRODUCT";
+            header = "Number of products";
+            product = false;
+        } else {
+            response.getWriter().println("Unknown command: " + command);
+            return;
+        }
+
+        final List<Map<String, Object>> table = sqlRequestService.executeQuery(sql);
+        String htmlContent;
+        if (product) {
+            htmlContent = HtmlFormat.productsToString(header, table);
+        } else {
+            htmlContent = HtmlFormat.valuesToString(header, table);
+        }
+        response.getWriter().println(HtmlFormat.newPage(htmlContent));
     }
 }

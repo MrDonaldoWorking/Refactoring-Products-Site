@@ -3,7 +3,6 @@ package ru.akirakozov.sd.refactoring.servlet;
 import ru.akirakozov.sd.refactoring.entity.Product;
 import ru.akirakozov.sd.refactoring.sql.SqlRequestService;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -11,8 +10,12 @@ import java.io.IOException;
 /**
  * @author akirakozov
  */
-public class AddProductServlet extends HttpServlet {
+public class AddProductServlet extends AbstractServlet {
+    public AddProductServlet(final SqlRequestService sqlRequestService) {
+        super(sqlRequestService);
+    }
 
+/*
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("name");
@@ -32,6 +35,17 @@ public class AddProductServlet extends HttpServlet {
 
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println("OK");
+    }
+*/
+
+    @Override
+    protected void doGetImpl(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+        final Product product = new Product(request);
+        final String sql = "INSERT INTO PRODUCT " +
+                "(NAME, PRICE) VALUES " + product.toSqlFormat();
+        sqlRequestService.executeUpdate(sql);
+
         response.getWriter().println("OK");
     }
 }
