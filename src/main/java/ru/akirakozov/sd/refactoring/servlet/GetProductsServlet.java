@@ -21,35 +21,6 @@ public class GetProductsServlet extends AbstractServlet {
          super(sqlRequestService);
     }
 
-/*
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-                Statement stmt = c.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCT");
-                response.getWriter().println("<html><body>");
-
-                while (rs.next()) {
-                    String  name = rs.getString("name");
-                    int price  = rs.getInt("price");
-                    response.getWriter().println(name + "\t" + price + "</br>");
-                }
-                response.getWriter().println("</body></html>");
-
-                rs.close();
-                stmt.close();
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
-*/
-
     @Override
     protected void doGetImpl(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         final String sql = "SELECT * FROM PRODUCT";
