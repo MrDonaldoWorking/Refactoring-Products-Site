@@ -19,7 +19,7 @@ public class HtmlFormat {
     }
 
     public static String newPage(final String content) {
-        return String.format("<html><bode>%s</body></html>", content);
+        return String.format("<html><body>%s</body></html>", content);
     }
 
     public static String withNewLine(final String content) {
