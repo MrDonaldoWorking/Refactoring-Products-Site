@@ -22,7 +22,18 @@ public class Product {
 
     public Product(final Map<String, Object> row) {
         this.name = getField(row, NAME_LABEL, String.class);
-        this.price = getField(row, PRICE_LABEL, Long.class);
+
+        long fromField;
+        try {
+            fromField = (long) getField(row, PRICE_LABEL, Integer.class);
+        } catch (final ClassCastException e) {
+            try {
+                fromField = getField(row, PRICE_LABEL, Long.class);
+            } catch (final ClassCastException ee) {
+                throw new RuntimeException("Cannot get price class, expected int or long: " + ee.getMessage());
+            }
+        }
+        this.price = fromField;
     }
 
     public Product(final HttpServletRequest request) {

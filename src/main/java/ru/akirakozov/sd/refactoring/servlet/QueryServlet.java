@@ -51,6 +51,7 @@ public class QueryServlet extends AbstractServlet {
 
         final List<Map<String, Object>> table = sqlRequestService.executeQuery(sql);
         String htmlContent;
+        header = header + ": ";
         if (product) {
             htmlContent = HtmlFormat.productsToString(header, table);
         } else {

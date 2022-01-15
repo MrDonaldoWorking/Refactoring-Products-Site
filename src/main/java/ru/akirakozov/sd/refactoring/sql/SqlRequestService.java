@@ -9,7 +9,7 @@ public class SqlRequestService {
 
     public SqlRequestService(final String jdbcUrl) {
         this.jdbcUrl = jdbcUrl;
-
+        createProductsIfNotExists();
     }
 
     private void createProductsIfNotExists() {
